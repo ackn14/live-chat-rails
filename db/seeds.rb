@@ -5,3 +5,11 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+# 3回同じ処理を回す
+3.times do |number|
+  # messageレコードにuser_idが必須なのでUserテーブルから先頭データを取得して指定
+  Message.create(content: "#{number}番目のメッセージです！", user_id: User.first.id)
+  puts "#{number}番目のメッセージを作成しました"
+end
+
+puts "メッセージの作成が完了しました。"
