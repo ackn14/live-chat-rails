@@ -11,16 +11,10 @@ class RoomChannel < ApplicationCable::Channel
 
   # ユーザーがチャットにメッセージを打ち込み、メッセージデータを受信するたびに呼び出されるメソッド
   def receive(data)
-    # emailをもとにfind_byメソッドでユーザーを取得
     user = User.find_by(email: data['email'])
-
-    # messageレコードを作成し、成功したらメッセージ内容をフロントエンドに送信
+    
     if message = Message.create(content: data['message'], user_id: user.id)
-      # room_channelチャネルに接続しているWebブラウザにデータを送信
-      ActionCable.server.broadcast 'room_channel', {
-        message: data['message'],
-        name: user.name,
-        message.created_at
-      }
+      ActionCable.server.broadcast 'room_channel', { message: data['message'], name: user.name, created_at: message.created_at }
     end
+  end
 end
